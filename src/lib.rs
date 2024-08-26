@@ -11,6 +11,7 @@ use solana_program::{
     msg,
 };
 
+// my program start point
 entrypoint!(process_instruction);
 
 fn process_instruction(
@@ -20,6 +21,7 @@ fn process_instruction(
 ) -> ProgramResult {
     let instruction = instruction_data[0];
 
+    // instruction sets
     match instruction {
         0 => create_account(program_id, accounts),
         1 => deposit(accounts, instruction_data),
@@ -101,7 +103,7 @@ fn withdraw(
     let seeds = &[b"vault", initializer.key.as_ref(), &[bump_seed]];
 
     let vault_balance = **vault_account.try_borrow_mut_lamports()?;
-    let withdrawal_amount = vault_balance / 10;  // Withdraw 10%
+    let withdrawal_amount = vault_balance / 10;  // Withdraw 10% TODO: Add error handling and test this more
 
     invoke_signed(
         &system_instruction::transfer(vault_account.key, recipient.key, withdrawal_amount),
